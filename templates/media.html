@@ -1,0 +1,16 @@
+{% extends "main.html" %} {% block content %} {% include "nav.html" %}
+<h1>
+    {% if mediatype %}{{ mediatype.name }}{% endif %} {% if mediatype and
+    mediaformat %}/{% endif %} {% if mediaformat %}{{ mediaformat.name }}{%
+    endif %}
+</h1>
+
+{% if media %}
+<ul>
+    {% for m in media %}
+    <li>{{ m.title }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You are not currently tracking any media of this type.</p>
+{% endif %} {% endblock %}

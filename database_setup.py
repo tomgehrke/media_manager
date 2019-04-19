@@ -2,11 +2,19 @@ import os
 import sys
 
 from sqlalchemy import (Column, ForeignKey, Integer, String,
-                        create_engine, event)
+                        DateTime, func, create_engine, event)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, scoped_session, sessionmaker
 
 Base = declarative_base()
+
+
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), nullable=False)
+    picture_url = Column(String(250), nullable=False, default='')
+    email = Column(String(50), nullable=False, default='')
 
 
 class MediaType(Base):
@@ -20,6 +28,15 @@ class MediaType(Base):
             id: self.id,
             name: self.name,
         }
+
+
+def init_mediatype(session):
+    session.add_all([
+        MediaType(name='Movie'),
+        MediaType(name='TV Series'),
+        MediaType(name='Webisode'),
+    ])
+    session.commit()
 
 
 class MediaFormat(Base):
@@ -37,6 +54,16 @@ class MediaFormat(Base):
         }
 
 
+def init_mediaformat(session):
+    session.add_all([
+        MediaFormat(name='VHS'),
+        MediaFormat(name='DVD'),
+        MediaFormat(name='Blu-Ray'),
+        MediaFormat(name='Streaming'),
+        MediaFormat(name='Laserdisc'), ])
+    session.commit()
+
+
 class Media(Base):
     __tablename__ = 'media'
     id = Column(Integer, primary_key=True)
@@ -51,6 +78,10 @@ class Media(Base):
     mediaformat_id = Column(Integer,
                             ForeignKey('mediaformat.id'), nullable=False)
     mediaformat = relationship(MediaFormat)
+    created_user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship(User)
+    created_date = Column(DateTime(timezone=True),
+                          nullable=False, default=func.now())
 
     @property
     def serialize(self):
@@ -65,25 +96,6 @@ class Media(Base):
             mediatype_id: self.mediatype_id,
             mediaformat_id: self.mediaformat_id,
         }
-
-
-def init_mediatype(session):
-    session.add_all([
-        MediaType(name='Movie'),
-        MediaType(name='TV Series'),
-        MediaType(name='Webisode'),
-    ])
-    session.commit()
-
-
-def init_mediaformat(session):
-    session.add_all([
-        MediaFormat(name='VHS'),
-        MediaFormat(name='DVD'),
-        MediaFormat(name='Blu-Ray'),
-        MediaFormat(name='Streaming'),
-        MediaFormat(name='Laserdisc'), ])
-    session.commit()
 
 
 if __name__ == '__main__':
