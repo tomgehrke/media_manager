@@ -99,7 +99,7 @@ def editMedia(media_id):
 @app.route('/mediatype/<int:mediatype_id>/')
 def listMediaByType(mediatype_id):
     mediatype = session.query(MediaType).filter_by(id=mediatype_id).one()
-    media = session.query(Media).filter_by(mediatype_id=mediatype_id).all()
+    media = session.query(Media).filter_by(mediatype_id=mediatype_id).order_by(Media.title, Media.year).all()
     return render_template(
         'media.html',
         media=media,
@@ -110,7 +110,7 @@ def listMediaByType(mediatype_id):
 @app.route('/mediaformat/<int:mediaformat_id>/')
 def listMediaByFormat(mediaformat_id):
     mediaformat = session.query(MediaFormat).filter_by(id=mediaformat_id).one()
-    media = session.query(Media).filter_by(mediaformat_id=mediaformat_id).all()
+    media = session.query(Media).filter_by(mediaformat_id=mediaformat_id).order_by(Media.title, Media.year).all()
     return render_template(
         'media.html',
         media=media,
@@ -122,7 +122,7 @@ def listMediaByFormat(mediaformat_id):
 @app.route('/mediaformat/<int:mediaformat_id>/json/')
 @app.route('/mediatype/<int:mediatype_id>/json/')
 def listMediaJSON(mediaformat_id=0, mediatype_id=0):
-    mediaQuery = session.query(Media)
+    mediaQuery = session.query(Media).order_by(Media.title, Media.year)
     if mediaformat_id > 0:
         mediaQuery = mediaQuery.filter_by(mediaformat_id=str(mediaformat_id))
     if mediatype_id > 0:
