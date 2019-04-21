@@ -26,6 +26,8 @@ Base.metadata.bind = engine
 DBSession = scoped_session(sessionmaker(bind=engine))
 session = DBSession()
 
+redirect_url = '/'
+
 
 @app.route('/')
 def listMediaTypes():
@@ -40,9 +42,11 @@ def listMediaTypes():
 
 @app.route('/media/new/', methods=['GET', 'POST'])
 def createMedia():
+
     if 'user_id' not in login_session:
         return redirect('/login')
     else:
+        global redirect_url
         mediatypes = session.query(MediaType).all()
         mediaformats = session.query(MediaFormat).all()
         if request.method == 'POST':
@@ -56,8 +60,9 @@ def createMedia():
             )
             session.add(newMedia)
             session.commit()
-            return redirect(request.referrer)
+            return redirect(redirect_url)
         else:
+            redirect_url = request.referrer
             return render_template(
                 'createMedia.html',
                 mediatypes=mediatypes,
