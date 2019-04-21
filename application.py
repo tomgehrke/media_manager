@@ -42,7 +42,6 @@ def listMediaTypes():
 
 @app.route('/media/new/', methods=['GET', 'POST'])
 def createMedia():
-
     if 'user_id' not in login_session:
         return redirect('/login')
     else:
@@ -65,6 +64,34 @@ def createMedia():
             redirect_url = request.referrer
             return render_template(
                 'createMedia.html',
+                mediatypes=mediatypes,
+                mediaformats=mediaformats)
+
+
+@app.route('/media/<int:media_id>/edit/', methods=['GET', 'POST'])
+def editMedia(media_id):
+    media = session.query(Media).filter_by(id=media_id).one()
+    if 'user_id' not in login_session:
+        return redirect('/login')
+    else:
+        global redirect_url
+        if request.method == 'POST':
+            media.title = request.form['title']
+            media.year = request.form['year']
+            media.rating = request.form['rating']
+            media.mediatype_id = request.form['mediatype']
+            media.mediaformat_id = request.form['mediaformat']
+
+            session.add(media)
+            session.commit()
+            return redirect(redirect_url)
+        else:
+            redirect_url = request.referrer
+            mediatypes = session.query(MediaType).all()
+            mediaformats = session.query(MediaFormat).all()
+            return render_template(
+                'editMedia.html',
+                media=media,
                 mediatypes=mediatypes,
                 mediaformats=mediaformats)
 
