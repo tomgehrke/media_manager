@@ -25,8 +25,8 @@ class MediaType(Base):
     @property
     def serialize(self):
         return {
-            id: self.id,
-            name: self.name,
+            'id': self.id,
+            'name': self.name,
         }
 
 
@@ -48,9 +48,9 @@ class MediaFormat(Base):
     @property
     def serialize(self):
         return {
-            id: self.id,
-            name: self.name,
-            description: self.description,
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
         }
 
 
@@ -69,7 +69,7 @@ class Media(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(250), nullable=False)
     year = Column(Integer, nullable=False, default=0)
-    rated = Column(String(10), nullable=False, default='')
+    rating = Column(String(10), nullable=False, default='')
     runtime = Column(Integer, nullable=False, default=0)
     poster_url = Column(String(250), nullable=False, default='')
     imdb_id = Column(String(8), nullable=False, default='')
@@ -86,15 +86,15 @@ class Media(Base):
     @property
     def serialize(self):
         return {
-            id: self.id,
-            title: self.title,
-            year: self.year,
-            rated: self.rated,
-            runtime: self.runtime,
-            poster_url: self.poster_url,
-            imdb_id: self.imdb_id,
-            mediatype_id: self.mediatype_id,
-            mediaformat_id: self.mediaformat_id,
+            'id': self.id,
+            'title': self.title,
+            'year': self.year,
+            'rating': self.rating,
+            'runtime': self.runtime,
+            'poster_url': self.poster_url,
+            'imdb_id': self.imdb_id,
+            'mediatype_id': self.mediatype_id,
+            'mediaformat_id': self.mediaformat_id,
         }
 
 

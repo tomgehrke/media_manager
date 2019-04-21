@@ -38,6 +38,32 @@ def listMediaTypes():
     )
 
 
+@app.route('/media/new/', methods=['GET', 'POST'])
+def createMedia():
+    if 'user_id' not in login_session:
+        return redirect('/login')
+    else:
+        mediatypes = session.query(MediaType).all()
+        mediaformats = session.query(MediaFormat).all()
+        if request.method == 'POST':
+            newMedia = Media(
+                title=request.form['title'],
+                year=request.form['year'],
+                rating=request.form['rating'],
+                mediatype_id=request.form['mediatype'],
+                mediaformat_id=request.form['mediaformat'],
+                created_user_id=login_session['user_id']
+            )
+            session.add(newMedia)
+            session.commit()
+            return redirect(request.referrer)
+        else:
+            return render_template(
+                'createMedia.html',
+                mediatypes=mediatypes,
+                mediaformats=mediaformats)
+
+
 @app.route('/mediatype/<int:mediatype_id>/')
 def listMediaByType(mediatype_id):
     mediatype = session.query(MediaType).filter_by(id=mediatype_id).one()
@@ -60,16 +86,17 @@ def listMediaByFormat(mediaformat_id):
     )
 
 
+@app.route('/media/json/')
 @app.route('/mediaformat/<int:mediaformat_id>/json/')
 @app.route('/mediatype/<int:mediatype_id>/json/')
 def listMediaJSON(mediaformat_id=0, mediatype_id=0):
-    query = session.query(Media)
+    mediaQuery = session.query(Media)
     if mediaformat_id > 0:
-        query.filter_by(mediaformat_id=mediaformat_id)
+        mediaQuery = mediaQuery.filter_by(mediaformat_id=str(mediaformat_id))
     if mediatype_id > 0:
-        query.filter_by(mediaformat_id=mediatype_id)
-    media = query.all()
-    return jsonify(media=[r.serialize for r in media])
+        mediaQuery = mediaQuery.filter_by(mediatype_id=str(mediatype_id))
+    media = mediaQuery.all()
+    return jsonify(media=[m.serialize for m in media])
 
 
 # AUTHENTICATION
@@ -164,14 +191,8 @@ def googleauth():
     login_session['picture'] = currentuser.picture_url
     login_session['email'] = currentuser.email
 
-    output = """<h1>Welcome, {username}</h1>
-        <img src="{picture}"
-        style="width: 300px; height: 300px; border-radius: 150px;
-        -webkit-border-radius: 150px;-moz-border-radius: 150px;">
-        """
-    return output.format(
-        username=login_session['username'],
-        picture=login_session['picture'])
+    output = "<h1>Welcome, {username}</h1>"
+    return output.format(username=login_session['username'])
 
 
 @app.route('/login')
@@ -204,9 +225,9 @@ def logout():
         del login_session['picture']
         return redirect("/", code=303)
     else:
-        response = make_response(json.dumps(
-            'Failed to revoke token for given user.',
-            400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.'),
+            400)
         response.headers['Content-Type'] = 'application/json'
         return response
 
