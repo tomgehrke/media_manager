@@ -49,16 +49,17 @@ def createMedia():
         mediatypes = session.query(MediaType).all()
         mediaformats = session.query(MediaFormat).all()
         if request.method == 'POST':
-            newMedia = Media(
-                title=request.form['title'],
-                year=request.form['year'],
-                rating=request.form['rating'],
-                mediatype_id=request.form['mediatype'],
-                mediaformat_id=request.form['mediaformat'],
-                created_user_id=login_session['user_id']
-            )
-            session.add(newMedia)
-            session.commit()
+            if request.form['title'] and 'submitButton' in request.form:
+                newMedia = Media(
+                    title=request.form['title'],
+                    year=request.form['year'],
+                    rating=request.form['rating'],
+                    mediatype_id=request.form['mediatype'],
+                    mediaformat_id=request.form['mediaformat'],
+                    created_user_id=login_session['user_id']
+                )
+                session.add(newMedia)
+                session.commit()
             return redirect(redirect_url)
         else:
             redirect_url = request.referrer
@@ -76,14 +77,15 @@ def editMedia(media_id):
     else:
         global redirect_url
         if request.method == 'POST':
-            media.title = request.form['title']
-            media.year = request.form['year']
-            media.rating = request.form['rating']
-            media.mediatype_id = request.form['mediatype']
-            media.mediaformat_id = request.form['mediaformat']
+            if request.form['title'] and 'submitButton' in request.form:
+                media.title = request.form['title']
+                media.year = request.form['year']
+                media.rating = request.form['rating']
+                media.mediatype_id = request.form['mediatype']
+                media.mediaformat_id = request.form['mediaformat']
 
-            session.add(media)
-            session.commit()
+                session.add(media)
+                session.commit()
             return redirect(redirect_url)
         else:
             redirect_url = request.referrer
