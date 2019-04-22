@@ -10,15 +10,13 @@
             </li>
             {% else %} {% if request.path != "/media/new/" %}
             <li class="nav-item">
-                <a
-                    class="nav-link btn btn-primary"
-                    href="{{ url_for('createMedia') }}"
-                    >Add Media</a
+                <a class="btn btn-primary" href="{{ url_for('createMedia') }}"
+                    ><i class="fas fa-plus"></i> Add Media</a
                 >
             </li>
             {% endif %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout') }}"
+                <a class="nav-link ml-3" href="{{ url_for('logout') }}"
                     >Logout <img src="{{ session["picture"] }}"
                     class="user_picture" />
                 </a>
