@@ -1,87 +1,89 @@
 {% extends "main.html" %} {% block content %} {% include "nav.html" %}
-<h1>Edit Media: {{media.title}} ({{media.year}})</h1>
+<div class="container">
+    <h1>Edit Media: {{media.title}} ({{media.year}})</h1>
 
-<form action="#" method="post">
-    <fieldset>
-        <div class="form-group">
-            <label for="title">Title:</label>
-            <input
-                id="title"
-                name="title"
-                type="text"
-                maxlength="250"
-                class="form-control"
-                value="{{media.title}}"
-            />
-        </div>
-        <div class="row form-group">
-            <div class="col-2">
-                <label for="mediatype">Type:</label>
-                <select id="mediatype" name="mediatype" class="form-control">
-                    {% for mediatype in mediatypes %}
-                    <option
-                        value="{{ mediatype.id }}"
-                        {% if media.mediatype_id == mediatype.id %}selected{%endif%}>
-                        {{mediatype.name}}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-2">
-                <label for="mediaformat">Format:</label>
-                <select
-                    id="mediaformat"
-                    name="mediaformat"
-                    class="form-control"
-                >
-                    {% for mediaformat in mediaformats %}
-                    <option
-                        value="{{ mediaformat.id }}"
-                        {% if media.mediaformat_id == mediaformat.id %}selected{%endif%}>
-                        {{mediaformat.name}}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-4">
-                <label for="year">Year:</label>
+    <form action="#" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="title">Title:</label>
                 <input
-                    id="year"
-                    name="year"
+                    id="title"
+                    name="title"
                     type="text"
-                    maxlength="4"
+                    maxlength="250"
                     class="form-control"
-                    value="{{media.year}}"
+                    value="{{media.title}}"
                 />
             </div>
-            <div class="col-4">
-                <label for="rating">Rating:</label>
+            <div class="row form-group">
+                <div class="col-2">
+                    <label for="mediatype">Type:</label>
+                    <select id="mediatype" name="mediatype" class="form-control">
+                        {% for mediatype in mediatypes %}
+                        <option
+                            value="{{ mediatype.id }}"
+                            {% if media.mediatype_id == mediatype.id %}selected{%endif%}>
+                            {{mediatype.name}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label for="mediaformat">Format:</label>
+                    <select
+                        id="mediaformat"
+                        name="mediaformat"
+                        class="form-control"
+                    >
+                        {% for mediaformat in mediaformats %}
+                        <option
+                            value="{{ mediaformat.id }}"
+                            {% if media.mediaformat_id == mediaformat.id %}selected{%endif%}>
+                            {{mediaformat.name}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label for="year">Year:</label>
+                    <input
+                        id="year"
+                        name="year"
+                        type="text"
+                        maxlength="4"
+                        class="form-control"
+                        value="{{media.year}}"
+                    />
+                </div>
+                <div class="col-4">
+                    <label for="rating">Rating:</label>
+                    <input
+                        id="rating"
+                        name="rating"
+                        type="text"
+                        maxlength="10"
+                        class="form-control"
+                        value="{{media.rating}}"
+                    />
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="form-group">
                 <input
-                    id="rating"
-                    name="rating"
-                    type="text"
-                    maxlength="10"
-                    class="form-control"
-                    value="{{media.rating}}"
+                    class="btn btn-primary"
+                    type="submit"
+                    name="submitButton"
+                    value="Save"
+                />
+                <input
+                    class="btn"
+                    type="submit"
+                    name="cancelButton"
+                    value="Cancel"
                 />
             </div>
-        </div>
-    </fieldset>
-    <fieldset>
-        <div class="form-group">
-            <input
-                class="btn btn-primary"
-                type="submit"
-                name="submitButton"
-                value="Save"
-            />
-            <input
-                class="btn"
-                type="submit"
-                name="cancelButton"
-                value="Cancel"
-            />
-        </div>
-    </fieldset>
-</form>
+        </fieldset>
+    </form>
+</div>
 {% endblock %}

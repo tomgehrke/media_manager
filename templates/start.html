@@ -1,27 +1,27 @@
 {% extends "main.html" %} {% block content %} {% include "nav.html" %}
-<h1>Media Manager</h1>
+<div class="container">
+    <h2>Browse by Type</h2>
+    <ul>
+        {% for mediatype in mediatypes %}
+        <li>
+            <a
+                href="{{url_for('listMediaByType', mediatype_id = mediatype.id)}}"
+                >{{ mediatype.name }}</a
+            >
+        </li>
+        {% endfor %}
+    </ul>
 
-<h2>Browse by Type</h2>
-<ul>
-    {% for mediatype in mediatypes %}
-    <li>
-        <a href="{{url_for('listMediaByType', mediatype_id = mediatype.id)}}">{{
-            mediatype.name
-        }}</a>
-    </li>
-    {% endfor %}
-</ul>
-
-<h2>Browse by Format</h2>
-<ul>
-    {% for mediaformat in mediaformats %}
-    <li>
-        <a
-            href="{{url_for('listMediaByFormat', mediaformat_id = mediaformat.id)}}"
-            >{{ mediaformat.name }}</a
-        >
-    </li>
-    {% endfor %}
-</ul>
-
+    <h2>Browse by Format</h2>
+    <ul>
+        {% for mediaformat in mediaformats %}
+        <li>
+            <a
+                href="{{url_for('listMediaByFormat', mediaformat_id = mediaformat.id)}}"
+                >{{ mediaformat.name }}</a
+            >
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
