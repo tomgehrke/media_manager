@@ -21,20 +21,23 @@ class MediaType(Base):
     __tablename__ = 'mediatype'
     id = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
+    description = Column(String(250), nullable=False, default='')
+    fa_icon_class = Column(String(20), nullable=False, default='')
 
     @property
     def serialize(self):
         return {
             'id': self.id,
             'name': self.name,
+            'description': self.description,
         }
 
 
 def init_mediatype(session):
     session.add_all([
-        MediaType(name='Movie'),
-        MediaType(name='TV Series'),
-        MediaType(name='Webisode'),
+        MediaType(name='Movie', fa_icon_class='fa-film'),
+        MediaType(name='TV Series', fa_icon_class='fa-tv'),
+        MediaType(name='Webisode', fa_icon_class='fa-podcast'),
     ])
     session.commit()
 
@@ -44,6 +47,7 @@ class MediaFormat(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
     description = Column(String(250), nullable=False, default='')
+    fa_icon_class = Column(String(20), nullable=False, default='')
 
     @property
     def serialize(self):
@@ -56,11 +60,12 @@ class MediaFormat(Base):
 
 def init_mediaformat(session):
     session.add_all([
-        MediaFormat(name='VHS'),
-        MediaFormat(name='DVD'),
-        MediaFormat(name='Blu-Ray'),
-        MediaFormat(name='Streaming'),
-        MediaFormat(name='Laserdisc'), ])
+        MediaFormat(name='File', fa_icon_class='fa-file-video'),
+        MediaFormat(name='VHS', fa_icon_class='fa-play'),
+        MediaFormat(name='DVD', fa_icon_class='fa-compact-disc'),
+        MediaFormat(name='Blu-Ray', fa_icon_class='fa-compact-disc'),
+        MediaFormat(name='Streaming', fa_icon_class='fa-stream'),
+    ])
     session.commit()
 
 

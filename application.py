@@ -30,7 +30,7 @@ redirect_url = '/'
 
 
 @app.route('/')
-def listMediaTypes():
+def showStart():
     mediatypes = session.query(MediaType).all()
     mediaformats = session.query(MediaFormat).all()
     return render_template(

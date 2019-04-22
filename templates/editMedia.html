@@ -1,5 +1,5 @@
 {% extends "main.html" %} {% block content %} {% include "nav.html" %}
-<div class="container">
+<div class="container pt-5">
     <h1>Edit Media: {{media.title}} ({{media.year}})</h1>
 
     <form action="#" method="post">
@@ -13,6 +13,7 @@
                     maxlength="250"
                     class="form-control"
                     value="{{media.title}}"
+                    required
                 />
             </div>
             <div class="row form-group">
@@ -81,6 +82,7 @@
                     type="submit"
                     name="cancelButton"
                     value="Cancel"
+                    formnovalidate
                 />
             </div>
         </fieldset>
