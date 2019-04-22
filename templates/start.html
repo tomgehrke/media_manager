@@ -1,27 +1,35 @@
 {% extends "main.html" %} {% block content %} {% include "nav.html" %}
-<div class="container">
-    <h2>Browse by Type</h2>
-    <ul>
+<div class="container pt-5">
+    <h2 class="text-center mt-4 mb-4">Browse by Type</h2>
+    <div class="d-flex justify-content-around">
         {% for mediatype in mediatypes %}
-        <li>
-            <a
-                href="{{url_for('listMediaByType', mediatype_id = mediatype.id)}}"
-                >{{ mediatype.name }}</a
-            >
-        </li>
+        <div class="card text-center" style="width: 10rem;">
+            <div class="card-body">
+                <a
+                    href="{{url_for('listMediaByType', mediatype_id = mediatype.id)}}"
+                >
+                    <i class="fas {{ mediatype.fa_icon_class }} fa-5x"></i>
+                    <h5 class="card-title">{{ mediatype.name }}</h5>
+                </a>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 
-    <h2>Browse by Format</h2>
-    <ul>
+    <h2 class="text-center mt-4 mb-4">Browse by Format</h2>
+    <div class="d-flex justify-content-around">
         {% for mediaformat in mediaformats %}
-        <li>
-            <a
-                href="{{url_for('listMediaByFormat', mediaformat_id = mediaformat.id)}}"
-                >{{ mediaformat.name }}</a
-            >
-        </li>
+        <div class="card text-center" style="width: 10rem;">
+            <div class="card-body">
+                <a
+                    href="{{url_for('listMediaByFormat', mediaformat_id = mediaformat.id)}}"
+                >
+                    <i class="fas {{ mediaformat.fa_icon_class }} fa-5x"></i>
+                    <h5 class="card-title">{{ mediaformat.name }}</h5>
+                </a>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}

@@ -1,7 +1,13 @@
 .user_picture {
-    width:24px;
-    height:24px;
+    width: 24px;
+    height: 24px;
     border-radius: 12px;
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
+}
+
+.mediatype-icon {
+    font-size: 30rem;
+    width: 10rem;
+    border: 1px solid red;
 }
