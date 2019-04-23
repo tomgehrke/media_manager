@@ -11,28 +11,31 @@
     <div class="card mb-3 mr-3 float-left" style="width: 400px;">
         <div class="row no-gutters">
             <div class="col-md-4">
-                <img src="{{ m.picture_url }}" class="card-img" />
+                <img src="{{ m.poster_url }}" class="card-img" />
             </div>
             <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title">{{ m.title }}</h5>
                     <div class="row">
-                        <div class="col-4">Year:</div>
-                        <div class="col-8">
-                            <strong>{{ m.year }}</strong>
+                        <div class="col">
+                            Year: <strong>{{ m.year }}</strong>
+                        </div>
+                        <div class="col">
+                            Rating: <strong>{{ m.rating }}</strong>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">Rating:</div>
-                        <div class="col-8">
-                            <strong>{{ m.rating }}</strong>
-                        </div>
+                        <a href="{{url_for('editMedia', media_id=m.id)}}"
+                            >Edit Media</a
+                        >
+                        {% if m.imdb_id != '' %}
+                        <a
+                            href="https://www.imdb.com/title/{{ m.imdb_id }}"
+                            target="_blank"
+                            >IMDB Page</a
+                        >
+                        {% endif %}
                     </div>
-                    <a
-                        href="{{url_for('editMedia', media_id=m.id)}}"
-                        class="btn btn-primary stretched-link"
-                        >Edit</a
-                    >
                 </div>
             </div>
         </div>
