@@ -77,7 +77,7 @@ class Media(Base):
     rating = Column(String(10), nullable=False, default='')
     runtime = Column(Integer, nullable=False, default=0)
     poster_url = Column(String(250), nullable=False, default='')
-    imdb_id = Column(String(8), nullable=False, default='')
+    imdb_id = Column(String(10), nullable=False, default='')
     mediatype_id = Column(Integer, ForeignKey('mediatype.id'), nullable=False)
     mediatype = relationship(MediaType)
     mediaformat_id = Column(Integer,
