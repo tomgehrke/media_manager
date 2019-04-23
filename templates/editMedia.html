@@ -68,6 +68,30 @@
                     />
                 </div>
             </div>
+            <div class="row form-group">
+                <div class="col-2">
+                    <label for="imdb_id">IMDB ID:</label>
+                    <input
+                        id="imdb_id"
+                        name="imdb_id"
+                        type="text"
+                        maxlength="10"
+                        class="form-control"
+                        value="{{media.imdb_id}}"
+                    />
+                </div>
+                <div class="col">
+                    <label for="poster_url">Poster URL:</label>
+                    <input
+                        id="poster_url"
+                        name="poster_url"
+                        type="text"
+                        maxlength="250"
+                        class="form-control"
+                        value="{{media.poster_url}}"
+                    />
+                </div>
+            </div>
         </fieldset>
         <fieldset>
             <div class="form-group">
