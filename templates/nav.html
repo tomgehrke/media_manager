@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+<nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark">
     <div class="container-fluid">
         <a href="/" class="navbar-brand"
             ><i class="fas fa-home"></i> Media Manager</a
@@ -17,8 +17,8 @@
             {% endif %}
             <li class="nav-item">
                 <a class="nav-link ml-3" href="{{ url_for('logout') }}"
-                    >Logout <img src="{{ session["picture"] }}"
-                    class="user_picture" />
+                    >Logout
+                    <img src="{{ session['picture'] }}" class="user_picture" />
                 </a>
             </li>
             {% endif %}
