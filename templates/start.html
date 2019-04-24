@@ -12,6 +12,9 @@
                     <h5 class="card-title">{{ mediatype.name }}</h5>
                 </a>
             </div>
+            <div class="card-footer text-center">
+                <strong>{{ mediatype.media_count }}</strong>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -27,6 +30,9 @@
                     <i class="fas {{ mediaformat.fa_icon_class }} fa-5x"></i>
                     <h5 class="card-title">{{ mediaformat.name }}</h5>
                 </a>
+            </div>
+            <div class="card-footer text-center">
+                <strong>{{ mediaformat.media_count }}</strong>
             </div>
         </div>
         {% endfor %}
