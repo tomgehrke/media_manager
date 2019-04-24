@@ -7,9 +7,9 @@
     </h1>
 
     {% if media %}
-    <div class="card-columns">
+    <div class="card-columns" style="column-count: 4;">
         {% for m in media %}
-        <div class="card" style="width:18rem;">
+        <div class="card" style="width:15rem;">
             {% if m.poster_url != '' %}
             <img src="{{ m.poster_url }}" class="card-img" />
             {% endif %}
@@ -20,7 +20,8 @@
                 <p class="card-text">{{ m.rating }} | {{ m.runtime }}</p>
                 {% if m.imdb_id != '' %}
                 <a
-                    class="btn btn-imdb"
+                    class="btn btn-sm w-100"
+                    style="background-color: #f5de50; color: #000; font-weight:bolder;"
                     href="https://www.imdb.com/title/{{ m.imdb_id }}"
                     target="_blank"
                     >IMDb Page</a
@@ -29,7 +30,9 @@
             </div>
             {% if session['user_id'] == m.created_user_id %}
             <div class="card-footer">
-                <a class="btn" href="{{url_for('editMedia', media_id=m.id)}}"
+                <a
+                    class="btn btn-secondary w-100"
+                    href="{{url_for('editMedia', media_id=m.id)}}"
                     >Edit Media</a
                 >
             </div>
