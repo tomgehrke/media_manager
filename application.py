@@ -6,7 +6,7 @@ import requests
 from flask import (Flask, render_template, request, make_response,
                    redirect, url_for, jsonify, flash)
 from flask import session as login_session
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database_setup import Base, Media, MediaType, MediaFormat, User
 from oauth2client.client import flow_from_clientsecrets
@@ -31,8 +31,28 @@ redirect_url = '/'
 
 @app.route('/')
 def showStart():
-    mediatypes = session.query(MediaType).all()
-    mediaformats = session.query(MediaFormat).all()
+    mediatype_sql = """select mediatype.id, mediatype.name, fa_icon_class, count(*) as media_count
+        from mediatype, media
+        where mediatype.id = media.mediatype_id
+        group by mediatype.name
+        union all
+        select mediatype.id, mediatype.name, fa_icon_class, 0 as media_count
+        from mediatype
+        where mediatype.id not in (select distinct mediatype_id from media)
+        order by name"""
+    mediaformat_sql = """-- SQLite
+        select mediaformat.id, mediaformat.name, fa_icon_class, count(*) as media_count
+        from mediaformat, media
+        where mediaformat.id = media.mediaformat_id
+        group by mediaformat.name
+        union all
+        select mediaformat.id, mediaformat.name, fa_icon_class, 0 as media_count
+        from mediaformat
+        where mediaformat.id not in (select distinct mediaformat_id from media)
+        order by name"""
+
+    mediatypes = session.execute(mediatype_sql)
+    mediaformats = session.execute(mediaformat_sql)
     return render_template(
         'start.html',
         mediatypes=mediatypes,
