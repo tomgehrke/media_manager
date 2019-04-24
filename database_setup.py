@@ -1,10 +1,22 @@
 import os
 import sys
 
-from sqlalchemy import (Column, ForeignKey, Integer, String,
-                        DateTime, func, create_engine, event)
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    DateTime,
+    func,
+    create_engine,
+    event
+)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, scoped_session, sessionmaker
+from sqlalchemy.orm import (
+    relationship,
+    scoped_session,
+    sessionmaker
+)
 
 Base = declarative_base()
 
