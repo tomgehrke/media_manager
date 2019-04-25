@@ -4,8 +4,9 @@
     <div class="d-flex justify-content-around">
         {% for mediatype in mediatypes %}
         <div class="card text-center" style="width: 10rem;">
-            <div class="card-body">
+            <div class="card-body p-0">
                 <a
+                    class="stretched-link btn btn-info w-100 pt-3"
                     href="{{url_for('listMediaByType', mediatype_id = mediatype.id)}}"
                 >
                     <i class="fas {{ mediatype.fa_icon_class }} fa-5x"></i>
@@ -23,8 +24,9 @@
     <div class="d-flex justify-content-around">
         {% for mediaformat in mediaformats %}
         <div class="card text-center" style="width: 10rem;">
-            <div class="card-body">
+            <div class="card-body p-0">
                 <a
+                    class="stretched-link btn btn-info w-100 pt-3"
                     href="{{url_for('listMediaByFormat', mediaformat_id = mediaformat.id)}}"
                 >
                     <i class="fas {{ mediaformat.fa_icon_class }} fa-5x"></i>
