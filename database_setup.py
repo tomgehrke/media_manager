@@ -87,7 +87,6 @@ class Media(Base):
     title = Column(String(250), nullable=False)
     year = Column(Integer, nullable=False, default=0)
     rating = Column(String(10), nullable=False, default='')
-    runtime = Column(Integer, nullable=False, default=0)
     poster_url = Column(String(250), nullable=False, default='')
     imdb_id = Column(String(10), nullable=False, default='')
     mediatype_id = Column(Integer, ForeignKey('mediatype.id'), nullable=False)
@@ -107,7 +106,6 @@ class Media(Base):
             'title': self.title,
             'year': self.year,
             'rating': self.rating,
-            'runtime': self.runtime,
             'poster_url': self.poster_url,
             'imdb_id': self.imdb_id,
             'mediatype_id': self.mediatype_id,
