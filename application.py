@@ -3,12 +3,32 @@ import json
 import random
 import httplib2
 import requests
-from flask import (Flask, render_template, request, make_response,
-                   redirect, url_for, jsonify, flash)
+from flask import (
+    Flask,
+    render_template,
+    request,
+    make_response,
+    redirect,
+    url_for,
+    jsonify,
+    flash
+)
 from flask import session as login_session
-from sqlalchemy import create_engine, func
-from sqlalchemy.orm import scoped_session, sessionmaker
-from database_setup import Base, Media, MediaType, MediaFormat, User
+from sqlalchemy import (
+    create_engine,
+    func
+)
+from sqlalchemy.orm import (
+    scoped_session,
+    sessionmaker
+)
+from database_setup import (
+    Base,
+    Media,
+    MediaType,
+    MediaFormat,
+    User
+)
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
@@ -40,8 +60,7 @@ def showStart():
         from mediatype
         where mediatype.id not in (select distinct mediatype_id from media)
         order by name"""
-    mediaformat_sql = """-- SQLite
-        select mediaformat.id, mediaformat.name, fa_icon_class, count(*) as media_count
+    mediaformat_sql = """select mediaformat.id, mediaformat.name, fa_icon_class, count(*) as media_count
         from mediaformat, media
         where mediaformat.id = media.mediaformat_id
         group by mediaformat.name
@@ -82,6 +101,7 @@ def createMedia():
                 )
                 session.add(newMedia)
                 session.commit()
+                flash('Added "{title}"!'.format(title=newMedia.title), 'info')
             return redirect(redirect_url)
         else:
             redirect_url = request.referrer
@@ -93,10 +113,13 @@ def createMedia():
 
 @app.route('/media/<int:media_id>/edit/', methods=['GET', 'POST'])
 def editMedia(media_id):
-    media = session.query(Media).filter_by(id=media_id).one()
     if 'user_id' not in login_session:
         return redirect('/login')
     else:
+        media = session.query(Media).filter_by(id=media_id).one()
+        if login_session.get('user_id') != media.created_user_id:
+            flash('You may not edit media that you did not add!', 'danger')
+            return redirect('/')
         global redirect_url
         if request.method == 'POST':
             if request.form['title'] and 'submitButton' in request.form:
@@ -120,6 +143,27 @@ def editMedia(media_id):
                 media=media,
                 mediatypes=mediatypes,
                 mediaformats=mediaformats)
+
+
+@app.route('/media/<int:media_id>/delete/', methods=['GET', 'POST'])
+def deleteMedia(media_id):
+    if 'user_id' not in login_session:
+        return redirect('/login')
+    else:
+        mediaToDelete = session.query(Media).filter_by(id=media_id).one()
+        if login_session.get('user_id') != mediaToDelete.created_user_id:
+            flash('You may not delete media that you did not add!', 'danger')
+            return redirect('/')
+        global redirect_url
+        if request.method == 'POST':
+            if "submitButton" in request.form:
+                session.delete(mediaToDelete)
+                session.commit()
+                flash('Deleted "{title}"'.format(
+                    title=mediaToDelete.title), 'info')
+            return redirect(redirect_url)
+        else:
+            return render_template('deleteMedia.html', media=mediaToDelete)
 
 
 @app.route('/mediatype/<int:mediatype_id>/')

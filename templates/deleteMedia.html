@@ -1,0 +1,31 @@
+{% extends "main.html" %} {% block content %} {% include "nav.html" %}
+<div class="container pt-5">
+    <div class="card p-3">
+        <h1>
+            Are you sure you want to delete "{{ media.title }}" {% if media.year
+            !='' %}({{ media.year }}){% endif %}?
+        </h1>
+
+        <form action="#" method="post">
+            <button
+                type="submit"
+                class="btn btn-danger"
+                id="submitButton"
+                name="submitButton"
+                type="submit"
+            >
+                Delete
+            </button>
+            <button
+                type="submit"
+                class="btn"
+                id="cancelButton"
+                name="cancelButton"
+                type="submit"
+            >
+                Cancel
+            </button>
+        </form>
+        {% endblock %}
+    </div>
+</div>

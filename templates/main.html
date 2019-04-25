@@ -22,8 +22,31 @@
             href="{{ url_for('static', filename='styles.css')}}"
         />
     </head>
-    <body style="background-color: #eee">
-        {% block content %} {% endblock %}
+    <body class="bg-light">
+        {% block content %} {% endblock %} {% with messages =
+        get_flashed_messages(with_categories=true) %} {% if messages %}
+        <div aria-live="polite" aria-atomic="true">
+            <div
+                style="position: absolute; top: 4rem; right: .5rem; min-width:20rem;"
+            >
+                {% for category, message in messages %}
+                <div class="toast" data-autohode="false" data-delay="10000">
+                    <div class="toast-header bg-{{ category }} text-white">
+                        <strong class="mr-auto">Media Manager</strong>
+                        <button
+                            type="button"
+                            class="ml-2 mb-1 close"
+                            data-dismiss="toast"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                    <div class="toast-body">{{ message }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %} {% endwith %}
         <script
             src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -39,5 +62,10 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"
         ></script>
+        <script>
+            $(document).ready(function() {
+                $(".toast").toast("show");
+            });
+        </script>
     </body>
 </html>
