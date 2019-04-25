@@ -1,13 +1,17 @@
 {% extends "main.html" %} {% block content %} {% include "nav.html" %}
 <div class="container pt-5">
     <h1>
-        {% if mediatype %}{{ mediatype.name }}{% endif %} {% if mediatype and
-        mediaformat %}/{% endif %} {% if mediaformat %}{{ mediaformat.name }}{%
-        endif %}
+        {% if mediatype %}<i class="fa {{ mediatype.fa_icon_class }}"></i>
+        {{ mediatype.name }}{% endif %} {% if mediatype and mediaformat %}/{%
+        endif %} {% if mediaformat %}<i
+            class="fa {{ mediaformat.fa_icon_class }}"
+        ></i>
+        {{ mediaformat.name }}{% endif %}
+        <a class="btn btn-info btn-xs" href="json">json</a>
     </h1>
 
     {% if media %}
-    <div class="card-columns" style="column-count: 4;">
+    <div id="media_columns" class="card-columns">
         {% for m in media %}
         <div class="card" style="width:15rem;">
             {% if m.poster_url != '' %}
@@ -17,7 +21,7 @@
                 <h5 class="card-title">
                     {{ m.title }} {%if m.year != '' %} ({{ m.year }}){% endif %}
                 </h5>
-                <p class="card-text">{{ m.rating }} | {{ m.runtime }}</p>
+                <p class="card-text">{{ m.rating }}</p>
                 {% if m.imdb_id != '' %}
                 <a
                     class="btn btn-sm w-100"
@@ -29,11 +33,16 @@
                 {% endif %}
             </div>
             {% if session['user_id'] == m.created_user_id %}
-            <div class="card-footer">
+            <div class="card-footer text-center">
                 <a
-                    class="btn btn-secondary w-100"
+                    class="btn btn-secondary"
                     href="{{url_for('editMedia', media_id=m.id)}}"
-                    >Edit Media</a
+                    >Edit</a
+                >
+                <a
+                    class="btn btn-danger"
+                    href="{{url_for('deleteMedia', media_id=m.id)}}"
+                    >Delete</a
                 >
             </div>
             {% endif %}

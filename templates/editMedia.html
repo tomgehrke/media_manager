@@ -1,115 +1,117 @@
 {% extends "main.html" %} {% block content %} {% include "nav.html" %}
 <div class="container pt-5">
-    <h1>Edit Media: {{media.title}} ({{media.year}})</h1>
+    <div class="card p-3">
+        <h1>Edit Media: {{media.title}} ({{media.year}})</h1>
 
-    <form action="#" method="post">
-        <fieldset>
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input
-                    id="title"
-                    name="title"
-                    type="text"
-                    maxlength="250"
-                    class="form-control"
-                    value="{{media.title}}"
-                    required
-                />
-            </div>
-            <div class="row form-group">
-                <div class="col-2">
-                    <label for="mediatype">Type:</label>
-                    <select id="mediatype" name="mediatype" class="form-control">
-                        {% for mediatype in mediatypes %}
-                        <option
-                            value="{{ mediatype.id }}"
-                            {% if media.mediatype_id == mediatype.id %}selected{%endif%}>
-                            {{mediatype.name}}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-2">
-                    <label for="mediaformat">Format:</label>
-                    <select
-                        id="mediaformat"
-                        name="mediaformat"
-                        class="form-control"
-                    >
-                        {% for mediaformat in mediaformats %}
-                        <option
-                            value="{{ mediaformat.id }}"
-                            {% if media.mediaformat_id == mediaformat.id %}selected{%endif%}>
-                            {{mediaformat.name}}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-4">
-                    <label for="year">Year:</label>
+        <form action="#" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <label for="title">Title:</label>
                     <input
-                        id="year"
-                        name="year"
-                        type="text"
-                        maxlength="4"
-                        class="form-control"
-                        value="{{media.year}}"
-                    />
-                </div>
-                <div class="col-4">
-                    <label for="rating">Rating:</label>
-                    <input
-                        id="rating"
-                        name="rating"
-                        type="text"
-                        maxlength="10"
-                        class="form-control"
-                        value="{{media.rating}}"
-                    />
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-2">
-                    <label for="imdb_id">IMDB ID:</label>
-                    <input
-                        id="imdb_id"
-                        name="imdb_id"
-                        type="text"
-                        maxlength="10"
-                        class="form-control"
-                        value="{{media.imdb_id}}"
-                    />
-                </div>
-                <div class="col">
-                    <label for="poster_url">Poster URL:</label>
-                    <input
-                        id="poster_url"
-                        name="poster_url"
+                        id="title"
+                        name="title"
                         type="text"
                         maxlength="250"
                         class="form-control"
-                        value="{{media.poster_url}}"
+                        value="{{media.title}}"
+                        required
                     />
                 </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <div class="form-group">
-                <input
-                    class="btn btn-primary"
-                    type="submit"
-                    name="submitButton"
-                    value="Save"
-                />
-                <input
-                    class="btn"
-                    type="submit"
-                    name="cancelButton"
-                    value="Cancel"
-                    formnovalidate
-                />
-            </div>
-        </fieldset>
-    </form>
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="mediatype">Type:</label>
+                        <select id="mediatype" name="mediatype" class="form-control">
+                            {% for mediatype in mediatypes %}
+                            <option
+                                value="{{ mediatype.id }}"
+                                {% if media.mediatype_id == mediatype.id %}selected{%endif%}>
+                                {{mediatype.name}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="mediaformat">Format:</label>
+                        <select
+                            id="mediaformat"
+                            name="mediaformat"
+                            class="form-control"
+                        >
+                            {% for mediaformat in mediaformats %}
+                            <option
+                                value="{{ mediaformat.id }}"
+                                {% if media.mediaformat_id == mediaformat.id %}selected{%endif%}>
+                                {{mediaformat.name}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="year">Year:</label>
+                        <input
+                            id="year"
+                            name="year"
+                            type="text"
+                            maxlength="4"
+                            class="form-control"
+                            value="{{media.year}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="rating">Rating:</label>
+                        <input
+                            id="rating"
+                            name="rating"
+                            type="text"
+                            maxlength="10"
+                            class="form-control"
+                            value="{{media.rating}}"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="imdb_id">IMDB ID:</label>
+                        <input
+                            id="imdb_id"
+                            name="imdb_id"
+                            type="text"
+                            maxlength="10"
+                            class="form-control"
+                            value="{{media.imdb_id}}"
+                        />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col">
+                        <label for="poster_url">Poster URL:</label>
+                        <input
+                            id="poster_url"
+                            name="poster_url"
+                            type="text"
+                            maxlength="250"
+                            class="form-control"
+                            value="{{media.poster_url}}"
+                        />
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="form-group">
+                    <input
+                        class="btn btn-primary"
+                        type="submit"
+                        name="submitButton"
+                        value="Save"
+                    />
+                    <input
+                        class="btn"
+                        type="submit"
+                        name="cancelButton"
+                        value="Cancel"
+                        formnovalidate
+                    />
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </div>
 {% endblock %}
