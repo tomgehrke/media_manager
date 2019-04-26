@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+        />
         <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script
@@ -21,10 +30,16 @@
         <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
     </head>
 
-    <body>
-        <!-- GOOGLE PLUS SIGN IN BUTTON-->
-        <button id="signinButton">Google Signin</button>
-        <div id="result"></div>
+    <body style="background-color: #eee;">
+        <div class="container pt-5">
+            <div class="card p-3 text-center">
+                <!-- GOOGLE PLUS SIGN IN BUTTON-->
+                <button class="btn btn-primary" id="signinButton">
+                    Google Signin
+                </button>
+                <div id="result"></div>
+            </div>
+        </div>
 
         <script>
             $("#signinButton").click(function() {
@@ -41,9 +56,11 @@
                                 "application/octet-stream; charset=utf-8",
                             success: function(result) {
                                 $("#result").html(
-                                    "Login Successful!</br>" +
+                                    "<p>Login Successful!</p>" +
+                                        "<p><strong>" +
                                         result +
-                                        "</br>Redirecting..."
+                                        "</strong></p>" +
+                                        "<p>Redirecting...</p>"
                                 );
                                 setTimeout(function() {
                                     window.location.href = "/";
