@@ -22,5 +22,4 @@ From the application's root folder type **python database_setup.py** to initiali
 
 The next step is optional. Type **python loadSampleData.py** to pre-load the database with sample data. If you want to skip this and start with a blank slate, that is completely up to you.
 
-Finally, type **python application.py** to start the Flask web server. Point your web browser to **http://localhost:5000** and you should see the main dashboard which.
-
+Finally, type **python application.py** to start the Flask web server. Point your web browser to **http://localhost:5000** and you should see the main dashboard.
