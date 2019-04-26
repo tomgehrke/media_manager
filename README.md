@@ -38,27 +38,21 @@ Clicking a category will pull up a page that lists all of the associated media. 
 
 Media Manager takes advantage of Google OAuth as its authentication provider. Clicking the Login link at the upper right will provide you with a secure path to authentication.
 
----
-**NOTE**
-
-Logging in is a requirement for adding, editing and deleting items to the catalog.
-
----
+> **NOTE**
+>
+>Logging in is a requirement for adding, editing and deleting items to the catalog.
 
 ### Adding Media
 
 When adding media, the only information that is _absolutely_ required is the Title.
 
----
-**NOTE**
-
-The IMDb ID for media can be found on the IMDb website ([http](https://www.imdb.com)). The easiest way to determine it is to look at the URL for a particular item.
-
-Example:
-
-The link to the 2009 release of Star Trek is 'https://www.imdb.com/title/tt0796366/'. The ID is the number that comes after the title. So in this case, the IMDb ID would be 'tt0796366'.
-
----
+> **NOTE**
+>
+>The IMDb ID for media can be found on the IMDb website ([https://www.imdb.com](https://www.imdb.com)). The easiest way to determine it is to look at the URL for a particular item.
+>
+>Example:
+>
+>The link to the 2009 release of Star Trek is ''https://www.imdb.com/title/tt0796366/''. The ID is the number that comes after the title. So in this case, the IMDb ID would be ''tt0796366''.
 
 ### Editing/Deleting Media
 
@@ -74,9 +68,6 @@ Media Manager can provide JSON formatted listings of media in the catalog. There
 | http://localhost:8000/mediatype/<media type id>/json/    | Listing filtered by a specific media type.   |
 | http://localhost:8000/mediaformat/<media format id/json/ | Listing filtered by a specific media format. |
 
----
-**NOTE**
-
-For your convenience, you will find a link to a link to the associated JSON enpoint for type/format-filtered listings immediately following the category title.
-
----
+>**NOTE**
+>
+>For your convenience, you will find a link to a link to the associated JSON enpoint for type/format-filtered listings immediately following the category title.
