@@ -52,7 +52,7 @@ When adding media, the only information that is _absolutely_ required is the Tit
 >
 >Example:
 >
->The link to the 2009 release of Star Trek is ''https://www.imdb.com/title/tt0796366/''. The ID is the number that comes after the title. So in this case, the IMDb ID would be ''tt0796366''.
+>The link to the 2009 release of Star Trek is `https://www.imdb.com/title/tt0796366/`. The ID is the number that comes after the title. So in this case, the IMDb ID would be `tt0796366`.
 
 ### Editing/Deleting Media
 
@@ -62,11 +62,11 @@ If you "own" the item on the media listing page (meaning that you are the one wh
 
 Media Manager can provide JSON formatted listings of media in the catalog. There are three endpoints.
 
-| Endpoint                                                 | Result                                       |
-| -------------------------------------------------------- | -------------------------------------------- |
-| http://localhost:8000/media/json                         | Full catalog listing.                        |
-| http://localhost:8000/mediatype/<media type id>/json/    | Listing filtered by a specific media type.   |
-| http://localhost:8000/mediaformat/<media format id/json/ | Listing filtered by a specific media format. |
+| Endpoint                                                   | Result                                       |
+| ---------------------------------------------------------- | -------------------------------------------- |
+| `http://localhost:8000/media/json`                         | Full catalog listing.                        |
+| `http://localhost:8000/mediatype/<media type id>/json/`    | Listing filtered by a specific media type.   |
+| `http://localhost:8000/mediaformat/<media format id/json/` | Listing filtered by a specific media format. |
 
 >**NOTE**
 >
