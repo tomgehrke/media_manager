@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Media Manager core application."""
 
 import string
 import json
@@ -48,28 +49,41 @@ Base.metadata.bind = engine
 DBSession = scoped_session(sessionmaker(bind=engine))
 session = DBSession()
 
+# Managing this variable globally to provide context when the need to redirect
+# to "the previous" page comes up.
 redirect_url = '/'
 
 
 @app.route('/')
 def showStart():
-    mediatype_sql = """select mediatype.id, mediatype.name, fa_icon_class, count(*) as media_count
+    """Display the application's starting page/dashboard."""
+    # Would normally have handled a more complex query like this
+    # with a View. SQLAlchemy, however, does not have a simple
+    # method for doing that. The fallback position was to
+    # execute raw SQL.
+    mediatype_sql = """select mediatype.id, mediatype.name,
+            fa_icon_class, count(*) as media_count
         from mediatype, media
         where mediatype.id = media.mediatype_id
         group by mediatype.name
         union all
-        select mediatype.id, mediatype.name, fa_icon_class, 0 as media_count
+        select mediatype.id, mediatype.name,
+            fa_icon_class, 0 as media_count
         from mediatype
-        where mediatype.id not in (select distinct mediatype_id from media)
+        where mediatype.id not in
+            (select distinct mediatype_id from media)
         order by name"""
-    mediaformat_sql = """select mediaformat.id, mediaformat.name, fa_icon_class, count(*) as media_count
+    mediaformat_sql = """select mediaformat.id, mediaformat.name,
+            fa_icon_class, count(*) as media_count
         from mediaformat, media
         where mediaformat.id = media.mediaformat_id
         group by mediaformat.name
         union all
-        select mediaformat.id, mediaformat.name, fa_icon_class, 0 as media_count
+        select mediaformat.id, mediaformat.name,
+            fa_icon_class, 0 as media_count
         from mediaformat
-        where mediaformat.id not in (select distinct mediaformat_id from media)
+        where mediaformat.id not in
+            (select distinct mediaformat_id from media)
         order by name"""
 
     mediatypes = session.execute(mediatype_sql)
@@ -83,9 +97,14 @@ def showStart():
 
 @app.route('/media/new/', methods=['GET', 'POST'])
 def createMedia():
+    """Manage media creation."""
     if 'user_id' not in login_session:
+        # The user ended up here "probably url hacking" when the were not
+        # logged in. Redirect them down the login path since authentication
+        # is required.
         return redirect('/login')
     else:
+        # Make sure we are using the global variable.
         global redirect_url
         mediatypes = session.query(MediaType).all()
         mediaformats = session.query(MediaFormat).all()
@@ -115,15 +134,25 @@ def createMedia():
 
 @app.route('/media/<int:media_id>/edit/', methods=['GET', 'POST'])
 def editMedia(media_id):
+    """Manage media editing."""
     if 'user_id' not in login_session:
+        # The user ended up here "probably url hacking" when the were not
+        # logged in. Redirect them down the login path since authentication
+        # is required.
         return redirect('/login')
     else:
         media = session.query(Media).filter_by(id=media_id).one()
+        # Check that user requesting to edit is the one who created
+        # the record. If not, send them back to the start with an
+        # error message.
         if login_session.get('user_id') != media.created_user_id:
             flash('You may not edit media that you did not add!', 'danger')
             return redirect('/')
+        # Make sure we are using the global variable.
         global redirect_url
         if request.method == 'POST':
+            # Make sure that at least the title was entered and that the user
+            # clicked the Save button (versus Cancel).
             if request.form['title'] and 'submitButton' in request.form:
                 media.title = request.form['title']
                 media.year = request.form['year']
@@ -149,15 +178,23 @@ def editMedia(media_id):
 
 @app.route('/media/<int:media_id>/delete/', methods=['GET', 'POST'])
 def deleteMedia(media_id):
+    """Manage media deletion."""
     if 'user_id' not in login_session:
+        # The user ended up here "probably url hacking" when the were not
+        # logged in. Redirect them down the login path since authentication
+        # is required.
         return redirect('/login')
     else:
         mediaToDelete = session.query(Media).filter_by(id=media_id).one()
+        # Check that user requesting to delete  is the one who created
+        # the record. If not, send them back to the start with an
+        # error message.
         if login_session.get('user_id') != mediaToDelete.created_user_id:
             flash('You may not delete media that you did not add!', 'danger')
             return redirect('/')
         global redirect_url
         if request.method == 'POST':
+            # Make sure the Delete button was pressed (versus Cancel).
             if "submitButton" in request.form:
                 session.delete(mediaToDelete)
                 session.commit()
@@ -170,9 +207,12 @@ def deleteMedia(media_id):
 
 @app.route('/mediatype/<int:mediatype_id>/')
 def listMediaByType(mediatype_id):
+    """Return list of media for a specific media type."""
     mediatype = session.query(MediaType).filter_by(id=mediatype_id).one()
     media = session.query(Media).filter_by(
         mediatype_id=mediatype_id).order_by(Media.title, Media.year).all()
+    # Template for rendering the media list is the same whether the results
+    # are filtered by type or by format.
     return render_template(
         'media.html',
         media=media,
@@ -182,9 +222,12 @@ def listMediaByType(mediatype_id):
 
 @app.route('/mediaformat/<int:mediaformat_id>/')
 def listMediaByFormat(mediaformat_id):
+    """Return list of media for a specific media format."""
     mediaformat = session.query(MediaFormat).filter_by(id=mediaformat_id).one()
     media = session.query(Media).filter_by(
         mediaformat_id=mediaformat_id).order_by(Media.title, Media.year).all()
+    # Template for rendering the media list is the same whether the results
+    # are filtered by type or by format.
     return render_template(
         'media.html',
         media=media,
@@ -196,19 +239,24 @@ def listMediaByFormat(mediaformat_id):
 @app.route('/mediaformat/<int:mediaformat_id>/json/')
 @app.route('/mediatype/<int:mediatype_id>/json/')
 def listMediaJSON(mediaformat_id=0, mediatype_id=0):
+    """Return media list as JSON. Can be either the full list or filtered."""
+    # Set up query to return a full media listing.
     mediaQuery = session.query(Media).order_by(Media.title, Media.year)
+    # If a media format id was passed, add a filter.
     if mediaformat_id > 0:
         mediaQuery = mediaQuery.filter_by(mediaformat_id=str(mediaformat_id))
+    # If a media type id was passed, add a filter.
     if mediatype_id > 0:
         mediaQuery = mediaQuery.filter_by(mediatype_id=str(mediatype_id))
     media = mediaQuery.all()
     return jsonify(media=[m.serialize for m in media])
 
 
-# AUTHENTICATION
+# OAUTH AUTHENTICATION ==========================
 
 @app.route('/gauth', methods=['POST'])
 def googleauth():
+    """Authenticate via OAUTH2.0 using Google credentials."""
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(
@@ -233,8 +281,8 @@ def googleauth():
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-           % access_token)
+    url = 'https://www.googleapis.com/oauth2/v1/'\
+        'tokeninfo?access_token={token}'.format(token=access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
@@ -283,7 +331,9 @@ def googleauth():
 
     data = answer.json()
 
+    # Grab the user's record from the User table if a record exists.
     currentuser = session.query(User).filter_by(email=data['email']).first()
+    # If the user does not have a record, create one for them.
     if currentuser is None:
         currentuser = User(
             username=data['name'],
@@ -292,17 +342,19 @@ def googleauth():
         session.add(currentuser)
         session.commit()
 
+    # Store the current user's information in the current session.
     login_session['user_id'] = currentuser.id
     login_session['username'] = currentuser.username
     login_session['picture'] = currentuser.picture_url
     login_session['email'] = currentuser.email
 
-    output = "<h1>Welcome, {username}</h1>"
-    return output.format(username=login_session['username'])
+    return ("Welcome, {username}"
+            .format(username=login_session['username']))
 
 
 @app.route('/login')
 def login():
+    """Render login "form"."""
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in range(32))
     login_session['state'] = state
@@ -311,6 +363,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+    """Revoke authentication token."""
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
@@ -318,8 +371,8 @@ def logout():
             401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = ('https://accounts.google.com/o/oauth2/revoke?token=%s' %
-           login_session['access_token'])
+    url = ('https://accounts.google.com/o/oauth2/revoke?token={token}'
+           .format(token=login_session['access_token']))
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
