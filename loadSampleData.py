@@ -11,7 +11,8 @@ from database_setup import (
     Media
 )
 
-engine = create_engine('sqlite:///mediamanager.db')
+engine = create_engine(
+    'postgresql+psycopg2://catalog_app:mnVzG3^9@localhost/catalog')
 Base.metadata.bind = engine
 
 DBSession = scoped_session(sessionmaker(bind=engine))

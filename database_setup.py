@@ -114,7 +114,8 @@ class Media(Base):
 
 
 if __name__ == '__main__':
-    engine = create_engine('sqlite:///mediamanager.db')
+    engine = create_engine(
+        'postgresql+psycopg2://catalog_app:mnVzG3^9@localhost/catalog')
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     DBSession = scoped_session(sessionmaker(bind=engine))

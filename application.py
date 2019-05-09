@@ -43,8 +43,8 @@ CLIENT_ID = json.loads(open('client_secret.json', 'r')
                        .read())['web']['client_id']
 APPLICATION_NAME = "Media Manager"
 
-engine = create_engine('sqlite:///mediamanager.db',
-                       connect_args={'check_same_thread': False})
+engine = create_engine(
+    'postgresql+psycopg2://catalog_app:mnVzG3^9@localhost/catalog')
 Base.metadata.bind = engine
 DBSession = scoped_session(sessionmaker(bind=engine))
 session = DBSession()
@@ -65,7 +65,8 @@ def showStart():
             fa_icon_class, count(*) as media_count
         from mediatype, media
         where mediatype.id = media.mediatype_id
-        group by mediatype.name
+        group by mediatype.id, mediatype.name,
+            fa_icon_class
         union all
         select mediatype.id, mediatype.name,
             fa_icon_class, 0 as media_count
@@ -77,7 +78,8 @@ def showStart():
             fa_icon_class, count(*) as media_count
         from mediaformat, media
         where mediaformat.id = media.mediaformat_id
-        group by mediaformat.name
+        group by mediaformat.id, mediaformat.name,
+            fa_icon_class
         union all
         select mediaformat.id, mediaformat.name,
             fa_icon_class, 0 as media_count
