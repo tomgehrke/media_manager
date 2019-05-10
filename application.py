@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Media Manager core application."""
 
+import os
 import string
 import json
 import random
@@ -39,7 +40,9 @@ from oauth2client.client import FlowExchangeError
 app = Flask(__name__)
 
 # OAUTH Constants
-CLIENT_ID = json.loads(open('client_secret.json', 'r')
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+CLIENT_SECRET_PATH = os.path.join(THIS_FOLDER, 'client_secret.json')
+CLIENT_ID = json.loads(open(CLIENT_SECRET_PATH, 'r')
                        .read())['web']['client_id']
 APPLICATION_NAME = "Media Manager"
 
@@ -271,7 +274,7 @@ def googleauth():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secret.json', scope='')
+        oauth_flow = flow_from_clientsecrets(CLIENT_SECRET_PATH, scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(authcode)
     except FlowExchangeError:
@@ -334,13 +337,14 @@ def googleauth():
     data = answer.json()
 
     # Grab the user's record from the User table if a record exists.
-    currentuser = session.query(User).filter_by(email=data['email']).first()
+    currentuser = session.query(User).filter_by(
+        email=func.lower(data['email'])).first()
     # If the user does not have a record, create one for them.
     if currentuser is None:
         currentuser = User(
             username=data['name'],
             picture_url=data['picture'],
-            email=data['email'])
+            email=func.lower(data['email']))
         session.add(currentuser)
         session.commit()
 
